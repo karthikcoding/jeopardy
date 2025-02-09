@@ -6,12 +6,14 @@
     <title>Super Bowl Jeopardy</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background-color: #282c34; color: white; }
-        .jeopardy-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 800px; margin: 20px auto; }
-        .category { font-weight: bold; padding: 10px; background: #444; }
-        .question { background: #007bff; padding: 20px; cursor: pointer; }
+        .jeopardy-board { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(6, 1fr); gap: 5px; max-width: 900px; margin: 20px auto; }
+        .category { font-weight: bold; padding: 15px; background: #444; text-transform: uppercase; }
+        .question { background: #007bff; padding: 20px; cursor: pointer; font-size: 1.5em; text-align: center; }
+        .question:hover { background: #0056b3; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
-        .modal-content { background: white; color: black; padding: 20px; max-width: 500px; text-align: left; }
+        .modal-content { background: white; color: black; padding: 20px; max-width: 500px; text-align: left; border-radius: 10px; }
         .close { margin-top: 10px; cursor: pointer; display: block; text-align: center; }
+        button { padding: 10px; margin: 5px; font-size: 1em; }
     </style>
 </head>
 <body>
@@ -27,11 +29,20 @@
         const categories = ["History", "Teams & Players", "Commercials", "Halftime", "Fun Facts"];
         const questions = [
             [{q: "Who won the first Super Bowl?", a: ["Packers", "Chiefs", "Bears", "Giants"], correct: 0},
-             {q: "Which team has won the most Super Bowls?", a: ["Cowboys", "Steelers", "49ers", "Patriots"], correct: 3}],
-            [{q: "Which team is called 'America's Team'?", a: ["Patriots", "Cowboys", "Packers", "Steelers"], correct: 1}],
-            [{q: "Which company uses Clydesdale horses in ads?", a: ["Coca-Cola", "Budweiser", "Ford", "Pepsi"], correct: 1}],
-            [{q: "Who had the most-watched halftime show?", a: ["Michael Jackson", "Katy Perry", "Rihanna", "Beyoncé"], correct: 1}],
-            [{q: "How long is a football field?", a: ["100 yards", "120 yards", "150 yards", "90 yards"], correct: 1}]
+             {q: "Which team has won the most Super Bowls?", a: ["Cowboys", "Steelers", "49ers", "Patriots"], correct: 3},
+             {q: "What year was the first Super Bowl played?", a: ["1965", "1967", "1970", "1958"], correct: 1},
+             {q: "Who was the first Super Bowl MVP?", a: ["Bart Starr", "Joe Namath", "Terry Bradshaw", "Johnny Unitas"], correct: 0},
+             {q: "Which team lost four straight Super Bowls?", a: ["Vikings", "Bills", "Chargers", "Falcons"], correct: 1}],
+            [{q: "Which team is called 'America's Team'?", a: ["Patriots", "Cowboys", "Packers", "Steelers"], correct: 1},
+             {q: "Which city has hosted the most Super Bowls?", a: ["Miami", "New Orleans", "Los Angeles", "Dallas"], correct: 0},
+             {q: "Which player has the most Super Bowl rings?", a: ["Joe Montana", "Tom Brady", "Terry Bradshaw", "Peyton Manning"], correct: 1},
+             {q: "Which team has never appeared in a Super Bowl?", a: ["Browns", "Jaguars", "Lions", "All of the above"], correct: 3},
+             {q: "Which player has the most Super Bowl MVP awards?", a: ["Joe Montana", "Tom Brady", "Jerry Rice", "Peyton Manning"], correct: 1}],
+            [{q: "Which company uses Clydesdale horses in ads?", a: ["Coca-Cola", "Budweiser", "Ford", "Pepsi"], correct: 1},
+             {q: "What was the first Super Bowl commercial to cost over $1 million?", a: ["Coca-Cola", "Apple Macintosh", "Nike", "Pepsi"], correct: 1},
+             {q: "Which candy had a famous ad featuring Betty White?", a: ["M&M’s", "Snickers", "Twix", "Reese’s"], correct: 1},
+             {q: "Which brand ran the ‘Crash the Super Bowl’ contest?", a: ["Doritos", "Pepsi", "Mountain Dew", "Tostitos"], correct: 0},
+             {q: "Which Super Bowl commercial featured a boy dressed as Darth Vader?", a: ["Toyota", "Volkswagen", "Chevrolet", "Hyundai"], correct: 1}],
         ];
 
         function createBoard() {
@@ -41,14 +52,16 @@
                 catDiv.className = "category";
                 catDiv.textContent = category;
                 board.appendChild(catDiv);
-                questions[index].forEach((question, qIndex) => {
+            });
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 5; col++) {
                     let qDiv = document.createElement("div");
                     qDiv.className = "question";
-                    qDiv.textContent = (qIndex + 1) * 100;
-                    qDiv.onclick = () => showQuestion(index, qIndex);
+                    qDiv.textContent = (row + 1) * 100;
+                    qDiv.onclick = () => showQuestion(col, row);
                     board.appendChild(qDiv);
-                });
-            });
+                }
+            }
         }
         
         function showQuestion(catIndex, qIndex) {
