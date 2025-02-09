@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Bowl Jeopardy</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #282c34; color: white; }
+        .jeopardy-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 800px; margin: 20px auto; }
+        .category { font-weight: bold; padding: 10px; background: #444; }
+        .question { background: #007bff; padding: 20px; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
+        .modal-content { background: white; color: black; padding: 20px; max-width: 500px; text-align: left; }
+        .close { margin-top: 10px; cursor: pointer; display: block; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Super Bowl Jeopardy</h1>
+    <div class="jeopardy-board" id="board"></div>
+    
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modal-content"></div>
+        <button class="close" onclick="closeModal()">Close</button>
+    </div>
+    
+    <script>
+        const categories = ["History", "Teams & Players", "Commercials", "Halftime", "Fun Facts"];
+        const questions = [
+            [{q: "Who won the first Super Bowl?", a: ["Packers", "Chiefs", "Bears", "Giants"], correct: 0},
+             {q: "Which team has won the most Super Bowls?", a: ["Cowboys", "Steelers", "49ers", "Patriots"], correct: 3}],
+            [{q: "Which team is called 'America's Team'?", a: ["Patriots", "Cowboys", "Packers", "Steelers"], correct: 1}],
+            [{q: "Which company uses Clydesdale horses in ads?", a: ["Coca-Cola", "Budweiser", "Ford", "Pepsi"], correct: 1}],
+            [{q: "Who had the most-watched halftime show?", a: ["Michael Jackson", "Katy Perry", "Rihanna", "Beyoncé"], correct: 1}],
+            [{q: "How long is a football field?", a: ["100 yards", "120 yards", "150 yards", "90 yards"], correct: 1}]
+        ];
+
+        function createBoard() {
+            const board = document.getElementById("board");
+            categories.forEach((category, index) => {
+                let catDiv = document.createElement("div");
+                catDiv.className = "category";
+                catDiv.textContent = category;
+                board.appendChild(catDiv);
+                questions[index].forEach((question, qIndex) => {
+                    let qDiv = document.createElement("div");
+                    qDiv.className = "question";
+                    qDiv.textContent = (qIndex + 1) * 100;
+                    qDiv.onclick = () => showQuestion(index, qIndex);
+                    board.appendChild(qDiv);
+                });
+            });
+        }
+        
+        function showQuestion(catIndex, qIndex) {
+            const modal = document.getElementById("modal");
+            const content = document.getElementById("modal-content");
+            let qData = questions[catIndex][qIndex];
+            content.innerHTML = `<h2>${qData.q}</h2>`;
+            qData.a.forEach((answer, i) => {
+                let btn = document.createElement("button");
+                btn.textContent = answer;
+                btn.onclick = () => alert(i === qData.correct ? "Correct!" : "Wrong!");
+                content.appendChild(btn);
+                content.appendChild(document.createElement("br"));
+            });
+            modal.style.display = "flex";
+        }
+        
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+        
+        createBoard();
+    </script>
+</body>
+</html>
